@@ -1,0 +1,87 @@
+<h1>Edit Page: <%= @page_data["name"] %></h1>
+
+<%= form_with url: update_page_website_path(@website, @page_data["name"].underscore), method: :patch, local: true do |form| %>
+  <!-- Edit Heading -->
+  <div>
+    <%= form.label :heading, "Page Heading" %>
+    <%= form.text_field :heading, value: @page_data["content"]["heading"], required: true %>
+  </div>
+
+  <!-- Edit Description -->
+  <div>
+    <%= form.label :description, "Page Description" %>
+    <%= form.text_area :description, value: @page_data["content"]["description"], required: true %>
+  </div>
+
+  <!-- Edit Sections -->
+  <h2>Sections</h2>
+  <div id="sections">
+    <% @page_data["content"]["sections"].each_with_index do |section, index| %>
+      <div class="section">
+        <%= form.label "sections[#{index}][title]", "Section Title" %>
+        <%= form.text_field "sections[#{index}][title]", value: section["title"], required: true %>
+
+        <%= form.label "sections[#{index}][body]", "Section Body" %>
+        <%= form.text_area "sections[#{index}][body]", value: section["body"], required: true %>
+
+        <%= form.label "sections[#{index}][image_url]", "Image URL" %>
+        <%= form.text_field "sections[#{index}][image_url]", value: section["image_url"] %>
+
+         <!-- form.label "sections[#{index}][image]", "Upload Image" -->
+        <!--  form.file_field "sections[#{index}][image]" -->
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Add Section -->
+  <button type="button" id="add-section">Add Section</button>
+
+  <!-- Submit Button -->
+  <%= form.submit "Save Changes" %>
+<% end %>
+
+  <!-- Preview Section -->
+<div id="preview-container">
+  <button type="button" id="preview-button">Preview Changes</button>
+  <div id="preview"></div>
+</div>
+
+<script>
+  // Add Section Script
+  document.getElementById('add-section').addEventListener('click', function() {
+    const sectionsDiv = document.getElementById('sections');
+    const index = sectionsDiv.children.length;
+
+    const newSectionHTML = `
+      <div class="section">
+        <label for="sections_${index}_title">Section Title</label>
+        <input type="text" name="content[sections][${index}][title]" required>
+
+        <label for="sections_${index}_body">Section Body</label>
+        <textarea name="content[sections][${index}][body]" required></textarea>
+
+        <label for="sections_${index}_image_url">Image URL</label>
+        <input type="text" name="content[sections][${index}][image_url]">
+      </div>
+    `;
+
+    sectionsDiv.insertAdjacentHTML('beforeend', newSectionHTML);
+  });
+
+  document.getElementById('preview-button').addEventListener('click', function(e) {
+    const formData = new FormData(document.querySelector('form'));
+
+    fetch('<%= preview_page_website_path(@website, @page_data["name"].downcase) %>', {
+      method: 'POST', // Ensure it's POST here
+      body: formData,
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      }
+    })
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('preview').innerHTML = html;
+    })
+    .catch(error => console.error('Error:', error));
+  });
+</script>
