@@ -1,19 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Contact Us</title>
-</head>
-<body>
-  <h1>{{ content.heading }}</h1>
-  <p>{{ content.description }}</p>
-  {% for section in content.sections %}
-    <section>
-      <h2>{{ section.title }}</h2>
-      <p>{{ section.body }}</p>
-      {% if section.image_url %}
-        <img src="{{ section.image_url }}" alt="{{ section.image_prompt }}" style="max-width:100%; height:auto;">
-      {% endif %}
-    </section>
-  {% endfor %}
-</body>
-</html>
+<h1>{{ content.heading }}</h1>
+<p>{{ content.description }}</p>
+{% for section in content.sections %}
+<section>
+    <h2>{{ section.title }}</h2>
+    <p>{{ section.body }}</p>
+    {% if section.image_url %}
+    <img src="{{ section.image_url }}" alt="{{ section.image_prompt }}" style="max-width:50%; height:auto;">
+    {% endif %}
+</section>
+{% endfor %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{ content.heading }}</title>
+</head>
+<body>
+  <nav>
+    <ul style="list-style: none; display: flex; gap: 10px;">
+      {% for link in navigation %}
+        <li>
+          <a href="{{ link.url }}" style="text-decoration: none; color: blue;">{{ link.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <!-- Page Content -->
+  <main>
+    {{ content_for_page }}
+  </main>
+</body>
+</html>
