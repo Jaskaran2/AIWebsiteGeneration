@@ -1,0 +1,10 @@
+<h1>Create Your Website</h1>
+
+<%= form_with model: @website, local: true do |form| %>
+  <div>
+    <%= form.label :description, "What kind of website do you want?" %>
+    <%= form.text_area :name, placeholder: "Your website name", required: true %>
+    <%= form.text_area :description, placeholder: "e.g., A portfolio website for a photographer.", required: true %>
+  </div>
+  <%= form.submit "Generate Website" %>
+<% end %>
